@@ -1,6 +1,9 @@
 name: Build
 
-on: [push, pull_request]
+on: [push, pull_request, workflow_dispatch]
+
+permissions:
+  contents: read
 
 jobs:
   build:
@@ -27,4 +30,11 @@ jobs:
         run: chmod +x ./gradlew
 
       - name: Build with Gradle
-        run: ./gradlew build
+        run: ./gradlew build --no-daemon
+
+      - name: Upload mod JAR
+        uses: actions/upload-artifact@v4
+        with:
+          name: kaleidoscope-compat-mc1.21.1-${{ github.sha }}
+          path: build/libs/*.jar
+          if-no-files-found: error
