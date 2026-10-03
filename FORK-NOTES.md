@@ -9,6 +9,14 @@
 本 fork 将注入参数和编译依赖更新到 1.6.0，并提高最低本体版本要求，
 避免旧版本体与新版注入接口混用。女仆磨盘任务的判断逻辑保持原样。
 
+### laodong.2：移除重复的牛奶汤底注册
+
+Cookery 1.6.0 已自行注册 `minecraft:milk`，旧扩展却在本体构造时先注册
+同一个 ID，导致本体延迟初始化时抛出 `Soup base with name minecraft:milk already exists!`。
+本版移除构造阶段的注册 Mixin 及旧牛奶汤底实现，使用本体提供的汤底。
+六份关联配方继续使用 `minecraft:milk`，保持配方和存档中原有的汤底 ID。
+验证时重点检查启动、汤锅添加/取回牛奶、空桶返还以及牛奶汤底配方。
+
 ## 构建与下载
 
 使用 JDK 21 执行 `./gradlew build`（Windows 为 `gradlew.bat build`）。
