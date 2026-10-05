@@ -4,7 +4,7 @@ import com.bmt.kaleidoscope_compat.config.kitchen.block.MillstoneConfig;
 import com.bmt.kaleidoscope_compat.mixins.kaleidoscope_cookery.accessor.BlockEntityAccessor;
 import com.bmt.kaleidoscope_compat.mixins.kaleidoscope_cookery.accessor.MillstoneBlockEntityAccessor;
 import com.github.ysbbbbbb.kaleidoscopecookery.blockentity.kitchen.MillstoneBlockEntity;
-import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -74,11 +74,11 @@ public abstract class MillstoneBlockEntityMixin {
     }
 
     @Inject(method = "canBindEntity", at = @At("HEAD"), cancellable = true)
-    private void onCanBindEntity(Mob mob, CallbackInfoReturnable<Boolean> cir) {
-        String className = mob.getClass().getName();
+    private void onCanBindEntity(LivingEntity entity, CallbackInfoReturnable<Boolean> cir) {
+        String className = entity.getClass().getName();
         if ("com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid".equals(className)) {
             try {
-                Object task = mob.getClass().getMethod("getTask").invoke(mob);
+                Object task = entity.getClass().getMethod("getTask").invoke(entity);
                 String uid = task.getClass().getMethod("getUid").invoke(task).toString();
                 if (uid.contains("millstone")) {
                     cir.setReturnValue(true);
